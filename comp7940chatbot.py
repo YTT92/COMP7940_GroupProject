@@ -3,7 +3,7 @@ from telegram import Update
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from telegram.ext import CallbackQueryHandler
-
+import json
 import re
 # The messageHandler is used for all message updates
 import configparser
@@ -58,7 +58,7 @@ def button(update, context):
     carpark_address = document['carpark_address']
 
     # send the carpark address as a message
-    query.edit_message_text(text=carpark_address)
+    query.edit_message_text(text=f"地址: {carpark_address}")
 
 
 def main():

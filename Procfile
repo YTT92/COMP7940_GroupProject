@@ -1,1 +1,1 @@
-python: python comp7940chatbot.py
+web: python comp7940chatbot.py

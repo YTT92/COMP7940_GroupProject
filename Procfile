@@ -1,2 +1,2 @@
-worker: python comp7940chatbot.py
+worker: python comp7940chatbotv2.py
 

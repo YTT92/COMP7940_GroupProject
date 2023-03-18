@@ -8,6 +8,7 @@ import re
 # The messageHandler is used for all message updates
 import configparser
 import logging
+import tabulate
 
 
 global cluster
@@ -95,7 +96,46 @@ def content_callback(update, context):
             query.message.reply_text(text=f"您選擇的停車場是: {carpark_name} \n抱歉未能提供Google 地圖連結 \U0001F615")
     elif query.data == '時租收費':
         fee = document['時租']
-        query.message.reply_text(text=f"您選擇的停車場是: {carpark_name} \n時租收費:{fee}")
+        print(fee)
+        keys = []
+        for row in fee:
+            # for t in row["時租"]:
+            for key in row.keys():
+                if key not in keys:
+                    keys.append(key)
+        table_content_list =[]
+        for t in fee:
+            table_content_list.append(list(t.values())[0])
+        t_r = [0]
+        for i in range(1,100):
+            if i*(len(fee)/len(keys))<len(fee):
+                t_r.append(int(i*(len(fee)/len(keys))))
+            elif i*(len(fee)/len(keys))==len(fee):
+                t_r.append(int(i*(len(fee)/len(keys))))
+            else:
+                break
+        rows=[]
+        if len(t_r)==7:
+            for i in range(1):
+                rows=(list(zip(table_content_list[t_r[i]:t_r[i+1]-1],table_content_list[t_r[i+1]:t_r[i+2]-1],table_content_list[t_r[i+2]:t_r[i+3]-1],table_content_list[t_r[i+3]:t_r[i+4]-1],table_content_list[t_r[i+4]:t_r[i+5]-1],table_content_list[t_r[i+5]:t_r[i+6]-1])))
+        if len(t_r)==6:
+            for i in range(1):
+                rows=(list(zip(table_content_list[t_r[i]:t_r[i+1]-1],table_content_list[t_r[i+1]:t_r[i+2]-1],table_content_list[t_r[i+2]:t_r[i+3]-1],table_content_list[t_r[i+3]:t_r[i+4]-1],table_content_list[t_r[i+4]:t_r[i+5]-1])))
+        elif len(t_r)==5:
+            for i in range(1):
+                rows=(list(zip(table_content_list[t_r[i]:t_r[i+1]-1],table_content_list[t_r[i+1]:t_r[i+2]-1],table_content_list[t_r[i+2]:t_r[i+3]-1],table_content_list[t_r[i+3]:t_r[i+4]-1])))
+        elif len(t_r)==4:
+            for i in range(1):
+                rows=(list(zip(table_content_list[t_r[i]:t_r[i+1]-1],table_content_list[t_r[i+1]:t_r[i+2]-1],table_content_list[t_r[i+2]:t_r[i+3]-1])))  
+        elif len(t_r)==3:
+            for i in range(1):
+                rows=(list(zip(table_content_list[t_r[i]:t_r[i+1]-1],table_content_list[t_r[i+1]:t_r[i+2]-1])))
+        else:
+            rows=[]
+        header = list(keys)
+        table_str = tabulate.tabulate(rows, headers=header)
+            # query.message.reply_text(text=f"您選擇的停車場是: {carpark_name} \n時租收費\U0001F4B5:{fee}")
+        query.message.reply_text(text=f"您選擇的停車場是: {carpark_name} \n {table_str}", parse_mode='HTML')
 
 # def error(update, context):
 #     """Log Errors caused by Updates."""
